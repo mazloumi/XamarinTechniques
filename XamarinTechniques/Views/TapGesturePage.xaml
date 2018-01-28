@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage Title="Tap Gesture" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="XamarinTechniques.TapGesturePage">
+    <StackLayout Padding="30">
+        <Entry>
+            <Entry.GestureRecognizers>
+                <TapGestureRecognizer Tapped="Entry_Focused" NumberOfTapsRequired="1" />
+            </Entry.GestureRecognizers>
+        </Entry>
+    </StackLayout>
+</ContentPage>
