@@ -18,7 +18,7 @@ Possible evaluation criteria could be:
 ### Techniques
 The table shows the techniques examined:
 |Technique|What is it?|Location|Mainly|XAML Syntax|Thoughts|Lines of Code in C#|Available|
-|-|-|-|-|-|-|-|-|
+|---|---|---|---|---|---|---|---|
 |**Attached Property**|Public Class with public static readonly`BindableProperty`, Getter and Setter and possibly`PropertyChanged` delegate |Shared project|C#|`<Entry local:MyClass.MyProperty="Some Value"/>`|Useful for extending View including wrapping other techniques listed here. Brevity of XAML.|39|Any XAML element|
 |**Behavior**|Sub class of `Behavior<T>` with overrides for `OnAttachedTo` and `OnDetachingFrom`|Shared project|C#|`<Entry><Entry.Behaviors><local:MyBehavior /></Entry.Behaviors></Entry>`|Useful for extending the View|23|`VisualElement.Behaviors`|
 |**Effect**|Sub class of `RoutingEffect` and platform-specific sub classes of `PlatformEffect` with overrides for `OnAttached`, `OnDetached` and possibly `OnElementPropertyChanged`|Shared project and platform-specific projects|C#|`<Entry><Entry.Effects><local:MyEffect /></Entry.Effects></Entry>`|Access to native control, events and properties|67|`Element.Effects`|
@@ -30,7 +30,7 @@ The table shows the techniques examined:
 ### Comparison
 The table evaluates the extent each technique contributes to a particular evaluation criteria. The perceived winner is highlighted bold.
 |Technique|Availability|XAML Only|Minimum LoC|Shared Project Only|Brevity|Reuse|
-|-|-|-|-|-|-|-|
+|---|---|---|---|---|---|---|
 |Attached Property|**100%+**|No|Medium|Yes|**1 Line**|**Highest**|
 |Behavior|86%|No|Medium|**Yes**|3 Lines|Medium|
 |Effect|100%|No|High|No|3 Lines|High|High|
