@@ -17,6 +17,7 @@ Possible evaluation criteria could be:
 
 ### Techniques
 The table shows the techniques examined:
+
 |Technique|What is it?|Location|Mainly|XAML Syntax|Thoughts|Lines of Code in C#|Available|
 |-|-|-|-|-|-|-|-|
 |**Attached Property**|Public Class with public static readonly`BindableProperty`, Getter and Setter and possibly`PropertyChanged` delegate |Shared project|C#|`<Entry local:MyClass.MyProperty="Some Value"/>`|Useful for extending View including wrapping other techniques listed here. Brevity of XAML.|39|Any XAML element|
@@ -29,6 +30,7 @@ The table shows the techniques examined:
 
 ### Comparison
 The table evaluates the extent each technique contributes to a particular evaluation criteria. The perceived winner is highlighted bold.
+
 |Technique|Availability|XAML Only|Minimum LoC|Shared Project Only|Brevity|Reuse|
 |-|-|-|-|-|-|-|
 |Attached Property|**100%+**|No|Medium|Yes|**1 Line**|**Highest**|
