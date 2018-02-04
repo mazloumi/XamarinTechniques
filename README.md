@@ -220,13 +220,15 @@ Gesture Recognizers can be considered for scenarios where a particular event is 
 
 ## When to Use What Technique in Xamarin.Forms?
 
-One question relates to better understand when to use what technique. This section compares various techniques applied to a simple use case where the background color of a view changes each when a control gains focus.
+One question relates to better understand when to use what technique. This section compares various techniques applied to a simple use case 
+### Scenario used for exploration
+The background color of a view changes each the control gains focus.
 
 ### Evaluation Criteria
 Possible evaluation criteria could be:
  1. **Availability of technique**. How many controls the technique can be applied to.
  2. **XAML-only**. The extent the solution requires C# code or can be purely implemented in XAML
- 3. **Lines of Code**. The number of lines of code needed to solve the problem
+ 3. **C# Lines of Code**. The number of lines of code needed to solve the problem
  4. **Shared project only**. The extent the solution can be implemented in the Forms project or platform-specific projects
  5. **Brevity of XAML**.  How readable and brief the XAML code is
  6. **Reusability of approach**.  Can a functionality can be written once and used across all similar controls
@@ -234,18 +236,18 @@ Possible evaluation criteria could be:
 ### Comparison
 The table evaluates the extent each technique contributes to a particular evaluation criteria. The perceived winner is highlighted bold.
 
-|Technique|Availability|XAML Only|C# LoC|Shared Project Only|Brevity|Reuse|Best Use
+|Technique|Availability|XAML Only|C# LoC|Shared Project Only|Brevity|Reuse|Comments
 |-|-|-|-|-|-|-|-|
-|Attached Property|**100%+**|No|Medium (39)|Yes|**1 Line**|**Highest**|Any XAML element, Extending View, Wrapping other techniques
-|Behavior|86%|No|Medium (23)|**Yes**|3 Lines|Medium|`VisualElement.Behaviors`, Extending the View
-|Effect|100%|No|High (67)|No|3 Lines|High|`Element.Effects`, Access to native control, events and properties
-|Event|100%|No|Low (5)|**Yes**|**1 Line**|Lowest|Events available for a view, Limited to specific view used in the XAML
-|Property Trigger|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
-|Data Trigger|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
-|Event Trigger|86%|No|Low (12)|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, Extending View and reuse of event handler
-|Implicit Style|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Resources`, UI Centric, gobale reuse
-|Renderer|100%|No|High (72)|No|**1 Line**|Low|40 renderer base classes, Full access to the native control used even allowing it to be replaced
-|Tap Gesture Recognizer|72%|No|Low (5)|**Yes**|3 Lines|Medium-Low|`View.GestureRecognizers`, Listen to user interaction and extend behavior. Event handler can be in the Code Behind or a command in the view model
+|**Attached Property**|**100%+**|No|Medium (39)|Yes|**1 Line**|**Highest**|Any XAML element, Extending View, Wrapping other techniques
+|**Behavior**|86%|No|Medium (23)|**Yes**|3 Lines|Medium|`VisualElement.Behaviors`, Extending the View
+|**Effect**|100%|No|High (67)|No|3 Lines|High|`Element.Effects`, Access to native control, events and properties
+|**Event**|100%|No|Low (5)|**Yes**|**1 Line**|Lowest|Events available for a view, Limited to specific view used in the XAML
+|**Property Trigger**|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
+|**Data Trigger**|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
+|**Event Trigger**|86%|No|Low (12)|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, Extending View and reuse of event handler
+|**Implicit Style**|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Resources`, UI Centric, gobale reuse
+|**Renderer**|100%|No|High (72)|No|**1 Line**|Low|40 renderer base classes, Full access to the native control used even allowing it to be replaced
+|**Tap Gesture Recognizer**|72%|No|Low (5)|**Yes**|3 Lines|Medium-Low|`View.GestureRecognizers`, Listen to user interaction and extend behavior. Event handler can be in the Code Behind or a command in the view model
 
 ### Conclusion
 For the specific use case different options can be considered depending on the principle applied:
