@@ -8,7 +8,7 @@ namespace XamarinTechniques
         {
             InitializeComponent();
 
-            string[] myPageNames = { "Event", "Property Trigger", "Behavior", "Attached Property","Tap Gesture", "Renderer", "Effect" };
+            string[] myPageNames = { "Event", "Event Trigger", "Property Trigger", "Data Trigger", "Implicit Style", "Behavior", "Attached Property", "Tap Gesture", "Renderer", "Effect" };
             examples.ItemsSource = myPageNames;
 
             examples.ItemTapped += (sender, e) =>
@@ -19,8 +19,17 @@ namespace XamarinTechniques
                     case "Event":
                         gotoPage = new EventPage();
                         break;
+                    case "Event Trigger":
+                        gotoPage = new EventTriggerPage();
+                        break;
                     case "Property Trigger":
                         gotoPage = new PropertyTriggerPage();
+                        break;
+                    case "Data Trigger":
+                        gotoPage = new DataTriggerPage();
+                        break;
+                    case "Implicit Style":
+                        gotoPage = new ImplicitStylePage();
                         break;
                     case "Behavior":
                         gotoPage = new BehaviorPage();
@@ -36,6 +45,9 @@ namespace XamarinTechniques
                         break;
                     case "Effect":
                         gotoPage = new EffectPage();
+                        break;
+                    case "Value Converter":
+                        gotoPage = new ValueConverterPage();
                         break;
                     default:
                         gotoPage = new EventPage();

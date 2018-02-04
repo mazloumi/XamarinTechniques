@@ -24,13 +24,15 @@ namespace XamarinTechniques
 
             if (GetCheckFocus(view))
             {
-                view.Focused += View_Focused;
+                view.Focused += HandleEvent;
+                view.Unfocused += HandleEvent;
             } else {
-                view.Focused -= View_Focused;
+                view.Focused -= HandleEvent;
+                view.Unfocused -= HandleEvent;
             }
         }
 
-        static void View_Focused(object sender, FocusEventArgs e)
+        static void HandleEvent(object sender, FocusEventArgs e)
         {
             var entry = sender as Entry;
             entry.BackgroundColor = (e.IsFocused) ? Color.Yellow : Color.Default;

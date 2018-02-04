@@ -6,6 +6,9 @@
                 <Trigger TargetType="Entry" Property="IsFocused" Value="True">
                     <Setter Property="BackgroundColor" Value="Yellow" />
                 </Trigger>
+                <Trigger TargetType="Entry" Property="IsFocused" Value="False">
+                    <Setter Property="BackgroundColor" Value="Default" />
+                </Trigger>                
             </Entry.Triggers>
         </Entry>
     </StackLayout>

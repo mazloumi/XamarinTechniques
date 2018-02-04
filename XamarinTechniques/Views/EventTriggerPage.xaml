@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage Title="Event Trigger" xmlns:local="clr-namespace:XamarinTechniques" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="XamarinTechniques.EventTriggerPage">
+    <StackLayout Padding="30">
+        <Entry>
+            <Entry.Triggers>
+                <EventTrigger Event="Focused">
+                    <local:FocusTriggerAction />
+                </EventTrigger>
+                <EventTrigger Event="Unfocused">
+                    <local:FocusTriggerAction />
+                </EventTrigger>
+            </Entry.Triggers>
+        </Entry>
+    </StackLayout>
+</ContentPage>

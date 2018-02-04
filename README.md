@@ -10,7 +10,11 @@ When learning about Xamarin you will come at some point across techniques such a
  - Behaviors
  - Effects
  - Event Handlers
- - Property Triggers
+ - Triggers
+	 - Property Triggers
+	 - Data Triggers
+	 - Event Triggers
+ - Implicit Styles (in conjunction with Triggers)
  - Renderer
  - Tap Gesture Recognizers
  - Bindable Properties [Todo]
@@ -43,6 +47,7 @@ The use of attached properties is not limited to only controls, layouts and view
         }        
 ```
 The `CreateAttached` method is key. Register your property by a name, its type, a default value and a `propertyChanged` delegate that is called when the attribute is used.
+
 ### Behavior
 One or more behaviors can be added to class that derives from `VisualElement`, ex.
 
@@ -67,6 +72,7 @@ Subclass Behavior<T> and override the two methods to implement a behavior, ex.
     }
 ```
 Other properties i.e. regular bindable properties will be discussed in future.
+
 ### Effect
 Effects are similar to behaviors but have a broader application as they can be added classes that derive from `Element`. You create an effect by sub classing the `RoutingEffect` class in the shared project and the `PlatformEffect` class in each platform-specific project overriding the methods  `OnAttached`, `OnDetached` and possibly `OnElementPropertyChanged`. Use the effect is XAML like this:
 ```sh
@@ -101,6 +107,7 @@ namespace com.yourcompany {
 }
 ```
 The attributes `ResolutionGroupName` and `ExportEffect` are intended uniquely register the effect so that the `RoutingEffect` can resolve the platform-specific implementation.
+
 ### Event Handler
 All controls in Xamarin.Forms have the one or the other event. You can use the event handler syntax to register an event hander you provide in the Code Behind, ex.
 ```sh
@@ -112,6 +119,7 @@ The implementation of the handler `Entry_Focused` is in the Code Behind of the X
     ....
     }
 ```
+
 ### Property Trigger
 The property trigger is applied to a target type and observes whether one of the properties matches a specific value. Triggers are available on any class deriving from `VisualElement` and to the `Style` class. If the condition is true one or more setters are applied that can set values for other properties. Use the property trigger like this:
 ```sh
@@ -123,7 +131,57 @@ The property trigger is applied to a target type and observes whether one of the
     </Entry.Triggers>
 </Entry>
 ```
-No C# code is needed. There are other type of triggers `DataTrigger`, `EventTrigger` and `MultiTrigger`, which we will discuss in future.
+No C# code is needed.
+
+### Data Trigger
+The data trigger is applied to a target type and observes the value of a property, referred to as `Path`, using data binding. Triggers are available on any class deriving from `VisualElement` and to the `Style` class. If the condition is true one or more setters are applied that can set values for other properties. The `Binding` property requires a `Source`, which is set in this use case to the named `entry`. Use the data trigger like this:
+```sh
+<Entry x:Name="entry">
+    <Entry.Triggers>
+        <DataTrigger TargetType="Entry" Binding="{Binding Source={x:Reference entry},Path=IsFocused}" Value="true">
+            <Setter Property="BackgroundColor" Value="Yellow"/>
+        </DataTrigger>
+    </Entry.Triggers>
+</Entry>
+```
+No C# code is needed.
+
+### Event Trigger
+The event trigger observes whether an event occurs and registers an action that is executed. Actions derive from the `TriggerAction<T>`. Triggers are available on any class deriving from `VisualElement` and to the `Style` class. Use the event trigger like this:
+```sh
+<Entry>
+    <Entry.Triggers>
+        <EventTrigger Event="SomeEvent">
+            <local:MyTriggerAction />
+        </EventTrigger>
+</Entry>
+```
+The action is implemented in C# but sub classing `TriggerAction<T>`, ex.
+```sh
+public class MyTriggerAction : TriggerAction<Entry> {
+    protected override void Invoke(Entry entry) {
+        ....
+    }
+}
+```
+
+### Implicit Styles (in conjunction with Triggers)
+All classes that derive from `VisualElement` can have a dictionary of resources. Styles are special type of resources that target a particular type. If the `Style` has a `Key` it must be assigned explicitly to a control, without a `Key` it is assigned to all instances of the targeted type. A Style can be defined as a local resource to a control, at the page level or globally. A Style cannot observe changes to properties. Combine it with triggers to support the use case. Use an implicit `Style` at the `Application` level like this:
+```sh
+<Application xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="mynamespace.App">
+    <Application.Resources>
+        <Style TargetType="Entry">
+            <Style.Triggers>
+                <Trigger TargetType="Entry" Property="IsFocused" Value="True">
+                    <Setter Property="BackgroundColor" Value="Yellow" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </Application.Resources>
+</Application>
+```
+No C# code is needed.
+
 ### Renderer
 A renderer take effects to the next level. Instead of deriving from routing effect and platform effect, which are not control-specific you derive from the renderer class provided by Xamarin.Forms to get full access even replacing the native control used by Xamarin, if you wish. To create your own renderer first derive from a control, ex.
 ```sh
@@ -142,6 +200,7 @@ namespace com.yourcompany {
 }
 ```
 The renderer is registered using the attribute `ExportRenderer`.
+
 ### Tap Gesture Recognizer
 Tap Gesture Recognizer are available for all classes that derive from `View`. You can use them to wire them to an event handler or a `Command` in your view model (TODO), ex.
 ```sh
@@ -158,6 +217,7 @@ The implementation of the handler `Entry_Focused` is in the Code Behind of the X
     }
 ```
 Gesture Recognizers can be considered for scenarios where a particular event is not available or to avoid using the Code Behind and instead to let the view model handle the event.
+
 ## When to Use What Technique in Xamarin.Forms?
 
 One question relates to better understand when to use what technique. This section compares various techniques applied to a simple use case where the background color of a view changes each when a control gains focus.
@@ -171,34 +231,30 @@ Possible evaluation criteria could be:
  5. **Brevity of XAML**.  How readable and brief the XAML code is
  6. **Reusability of approach**.  Can a functionality can be written once and used across all similar controls
 
-### Techniques
-The table shows the techniques examined:
-
-|Technique|What is it?|Location|Mainly|XAML Syntax|Thoughts|Lines of Code in C#|Available|
-|-|-|-|-|-|-|-|-|
-|**Attached Property**|Public Class with public static readonly`BindableProperty`, Getter and Setter and possibly`PropertyChanged` delegate |Shared project|C#|`<Entry local:MyClass.MyMember="Some Value"/>`|Useful for extending View including wrapping other techniques listed here. Brevity of XAML.|39|Any XAML element|
-|**Behavior**|Sub class of `Behavior<T>` with overrides for `OnAttachedTo` and `OnDetachingFrom`|Shared project|C#|`<Entry><Entry.Behaviors><local:MyBehavior /></Entry.Behaviors></Entry>`|Useful for extending the View|23|`VisualElement.Behaviors`|
-|**Effect**|Sub class of `RoutingEffect` and platform-specific sub classes of `PlatformEffect` with overrides for `OnAttached`, `OnDetached` and possibly `OnElementPropertyChanged`|Shared project and platform-specific projects|C#|`<Entry><Entry.Effects><local:MyEffect /></Entry.Effects></Entry>`|Access to native control, events and properties|67|`Element.Effects`|
-|**Event Handler**|View with a delegate for an event|Shared project Code Behind|C#|`<Entry Focused="Entry_Focused" />`|Usage limited to specific view used in the XAML|5|All Events available for a view|
-|**Property Trigger**|`Trigger` for specific `Property` and `Value` of a `TargetType` and `Setter` elements to change specific properties of the target type|Shared project|XAML|`<Entry><Entry.Triggers><Trigger Property="IsFocused" Value="True"><Setter Property="BackgroundColor" Value="Yellow"/></Trigger></Entry.Triggers></Entry>`|Scope limited but effective.|0|`VisualElement.Triggers` and `Style.Triggers`|
-|**Renderer**|Optional sub class of a visual element and platform-specific sub classes of the element's renderer class with override of `OnElementChanged` method evaluating `OldElement` and `NewElement` member of `ElementChangedEventArgs<T>`|Platform-specific projects|C#|`<local:MyControl/>`|Full access to the native control used even allowing it to be replaced|72|40 renderer base classes|
-|**Tap Gesture Recognizer**|`TapGestureRecognizer` with `Tapped` delegate triggered after `NumberOfTapsRequired`|Shared project|XAML|`<Entry><Entry.GestureRecognizers><TapGestureRecognizer Tapped="Entry_Focused" NumberOfTapsRequired="1" /></Entry.GestureRecognizers></Entry>`|Listen to user interaction and extend behavior. Event handler can be in the Code Behind or a command in the view model.|5|`View.GestureRecognizers`|
-
 ### Comparison
 The table evaluates the extent each technique contributes to a particular evaluation criteria. The perceived winner is highlighted bold.
 
-|Technique|Availability|XAML Only|Minimum LoC|Shared Project Only|Brevity|Reuse|
-|-|-|-|-|-|-|-|
-|Attached Property|**100%+**|No|Medium|Yes|**1 Line**|**Highest**|
-|Behavior|86%|No|Medium|**Yes**|3 Lines|Medium|
-|Effect|100%|No|High|No|3 Lines|High|
-|Event|100%|No|Low|**Yes**|**1 Line**|Lowest|
-|Property Trigger|86%|**Yes**|**0**|**Yes**|4 Lines|High|
-|Renderer|100%|No|High|No|**1 Line**|Low|
-|Tap Gesture Recognizer|72%|No|Low|**Yes**|3 Lines|Medium-Low|
+|Technique|Availability|XAML Only|C# LoC|Shared Project Only|Brevity|Reuse|Best Use
+|-|-|-|-|-|-|-|-|
+|Attached Property|**100%+**|No|Medium (39)|Yes|**1 Line**|**Highest**|Any XAML element, Extending View, Wrapping other techniques
+|Behavior|86%|No|Medium (23)|**Yes**|3 Lines|Medium|`VisualElement.Behaviors`, Extending the View
+|Effect|100%|No|High (67)|No|3 Lines|High|`Element.Effects`, Access to native control, events and properties
+|Event|100%|No|Low (5)|**Yes**|**1 Line**|Lowest|Events available for a view, Limited to specific view used in the XAML
+|Property Trigger|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
+|Data Trigger|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, UI centric
+|Event Trigger|86%|No|Low (12)|**Yes**|8 Lines|High|`VisualElement.Triggers` and `Style.Triggers`, Extending View and reuse of event handler
+|Implicit Style|86%|**Yes**|**0**|**Yes**|8 Lines|High|`VisualElement.Resources`, UI Centric, gobale reuse
+|Renderer|100%|No|High (72)|No|**1 Line**|Low|40 renderer base classes, Full access to the native control used even allowing it to be replaced
+|Tap Gesture Recognizer|72%|No|Low (5)|**Yes**|3 Lines|Medium-Low|`View.GestureRecognizers`, Listen to user interaction and extend behavior. Event handler can be in the Code Behind or a command in the view model
 
 ### Conclusion
-For the specific use case property trigger seems to be the most suitable approach. With 4 lines of XAML the problem is solved. The approach is not available though for all controls. What makes property triggers also attractive is that they can be defined in styles making them highly reusable. Next in line could be Attached Properties and Behaviors, which essentially are wrappers for Event handlers or even Tap Gesture Recognizers making them independent of the Code Behind. Effects and Renderer seem to be an overkill for this particular use case. The Tap Gesture Recognizer is not suitable in this particular case as tapping on the Entry does not trigger an a tap event.
+For the specific use case different options can be considered depending on the principle applied:
+
+ - Simple Event handler in C# is easy to understand and very little effort but not very reusable
+ - Property and data triggers inside Style offer maximum reuse with only XAML. Triggers are however not 100% available.
+ - Event Trigger or Attached Property as wrapper of a Behaviors inside Attached Property , both inside a Style offer maximum reuse with some C#.
+- Effects and Renderer seem to be an overkill for this particular use case. 
+-  The Tap Gesture Recognizer is not suitable in this particular case as tapping on the Entry does not trigger an a tap event.
 
 What do you think?
 

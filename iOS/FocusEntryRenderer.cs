@@ -15,16 +15,18 @@ namespace XamarinTechniques.iOS
 
             if (e.OldElement != null)
             {
-                e.OldElement.Focused -= Entry_Focused;
+                e.OldElement.Focused -= HandleEvent;
+                e.OldElement.Unfocused -= HandleEvent;
             }
 
             if (e.NewElement != null)
             {
-                e.NewElement.Focused += Entry_Focused;
+                e.NewElement.Focused += HandleEvent;
+                e.NewElement.Unfocused += HandleEvent;
             }
         }
 
-        void Entry_Focused(object sender, FocusEventArgs e)
+        void HandleEvent(object sender, FocusEventArgs e)
         {
             var entry = sender as Entry;
             entry.BackgroundColor = (e.IsFocused) ? Color.Yellow : Color.Default;

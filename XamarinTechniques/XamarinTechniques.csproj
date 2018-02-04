@@ -10,6 +10,9 @@
     <Compile Update="XamarinTechniquesPage.xaml.cs">
       <DependentUpon>XamarinTechniquesPage.xaml</DependentUpon>
     </Compile>
+    <Compile Condition=" '$(EnableDefaultCompileItems)' == 'true' " Update="EventPage.xaml.cs">
+      <DependentUpon>Views\Views\EventPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Xamarin.Forms" Version="2.5.0.122203" />

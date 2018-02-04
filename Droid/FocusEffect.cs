@@ -11,16 +11,18 @@ namespace XamarinTechniques.Droid
         protected override void OnAttached()
         {
             var entry = Element as Entry;
-            entry.Focused += Entry_Focused;
+            entry.Focused += HandleEvent;
+            entry.Unfocused += HandleEvent;
         }
 
         protected override void OnDetached()
         {
             var entry = Element as Entry;
-            entry.Focused -= Entry_Focused;
+            entry.Focused -= HandleEvent;
+            entry.Unfocused -= HandleEvent;
         }
 
-        void Entry_Focused(object sender, FocusEventArgs e)
+        void HandleEvent(object sender, FocusEventArgs e)
         {
             var entry = sender as Entry;
             entry.BackgroundColor = (e.IsFocused) ? Color.Yellow : Color.Default;

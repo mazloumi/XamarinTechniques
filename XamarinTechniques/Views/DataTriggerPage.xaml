@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage Title="Data Trigger" xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="XamarinTechniques.DataTriggerPage">
+    <StackLayout Padding="30">
+        <Entry x:Name="entry">
+            <Entry.Triggers>
+                <DataTrigger TargetType="Entry" Binding="{Binding Source={x:Reference entry},Path=IsFocused}" Value="true">
+                    <Setter Property="BackgroundColor" Value="Yellow" />
+                </DataTrigger>
+                 <DataTrigger TargetType="Entry" Binding="{Binding Source={x:Reference entry},Path=IsFocused}" Value="false">
+                    <Setter Property="BackgroundColor" Value="Default" />
+                </DataTrigger>               
+            </Entry.Triggers>
+        </Entry>
+    </StackLayout>
+</ContentPage>
