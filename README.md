@@ -48,6 +48,8 @@ The use of attached properties is not limited to only controls, layouts and view
 ```
 The `CreateAttached` method is key. Register your property by a name, its type, a default value and a `propertyChanged` delegate that is called when the attribute is used.
 
+**Attached properties can be used as wrappers for behaviors and triggers, which make them very powerful. You can Maximize the reuse of an attached property by using it inside an implicit style.**
+
 ### Behavior
 One or more behaviors can be added to class that derives from `VisualElement`, ex.
 
